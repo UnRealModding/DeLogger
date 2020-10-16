@@ -25,7 +25,6 @@ apply from: "https://raw.githubusercontent.com/UnRealDinnerbone/GradleHelpers/ma
 def theMinecraft_version = findLocalProperty("minecraft_version")
 def theForge_Version = findLocalProperty("forge_version")
 def theMappings_Version = findLocalProperty("mcp_mappings")
-def theJei_Version = findLocalProperty("jei_version")
 
 version = getVersionNumber()
 
