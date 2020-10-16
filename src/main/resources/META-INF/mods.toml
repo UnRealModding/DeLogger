@@ -1,0 +1,9 @@
+modLoader="javafml"
+loaderVersion="[33,)"
+license="All Rights Reserved (Permsion Granted for use on Curseforge modpacks, and to Feed The Beast for usage in modpacks"
+[[mods]]
+    modId="delogger"
+    version="${file.jarVersion}"
+    authors="UnRealDinnerbone"
+    displayName="DeLogger"
+    description="Removes Log Spam"
