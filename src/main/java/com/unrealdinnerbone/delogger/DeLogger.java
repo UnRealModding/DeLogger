@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.util.ClientRecipeBook;
 import net.minecraft.command.Commands;
+import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootTableManager;
 import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.Util;
@@ -35,6 +36,7 @@ public class DeLogger
         getLogger(VersionChecker.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(ForgeConfigSpec.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(LootTableManager.class).ifPresent(LoggerHacks::disableLogger);
+        getLogger(EntityType.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(SimpleReloadableResourceManager.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(YggdrasilAuthenticationService.class).ifPresent(LoggerHacks::disableLogger);
         LoggerHacks.disableLogger(LogManager.getLogger(ForgeConfigSpec.class));
