@@ -17,6 +17,9 @@ plugins {
     id "com.wynprice.cursemaven" version "2.1.5"
 
 }
+
+import net.minecraftforge.gradle.common.task.SignJar
+
 apply plugin: 'net.minecraftforge.gradle'
 
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/markdown-git-changelog.gradle'
@@ -77,6 +80,26 @@ String findLocalProperty(String name) {
     return this.getRootProject().property(name)
 }
 
+task signJar(type: SignJar, dependsOn: jar) {
+    if(System.getenv().get("file_name") != null) {
+        File file = new File(System.getenv().get("file_name"))
+        if (!file.exists()) {
+            new URL(System.getenv().get("url")).withInputStream { i -> file.withOutputStream { it << i } }
+        }
+        keyStore = file.path
+        alias = System.getenv().get("alias")
+        storePass = System.getenv().get("storePass")
+        keyPass = System.getenv().get("keyPass")
+        inputFile = jar.archivePath
+        outputFile = jar.archivePath
+        doLast {
+            file.delete()
+        }
+    }
+}
+
+build.dependsOn signJar
+
 jar {
     manifest {
         attributes([
@@ -92,9 +115,8 @@ jar {
 }
 
 curseforge {
-    if (project.hasProperty('unreal_curse_api_key')){
-        apiKey = project.getProperty('unreal_curse_api_key')
-    }
+    if(System.getenv().unreal_curse_api_key)
+        apiKey = System.getenv().unreal_curse_api_key
     project {
         id = project.property("curseforge_id")
         changelog = getGitChangelog

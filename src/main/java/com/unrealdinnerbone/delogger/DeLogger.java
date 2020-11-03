@@ -53,7 +53,7 @@ public class DeLogger
             Field field = clazz.getDeclaredField("LOGGER");
             field.setAccessible(true);
             return Optional.of((Logger) field.get(clazz));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException | ClassCastException | IllegalAccessException e) {
             return Optional.empty();
         }
     }
