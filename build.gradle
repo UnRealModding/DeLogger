@@ -84,6 +84,7 @@ task signJar(type: SignJar, dependsOn: jar) {
     if(System.getenv().get("file_name") != null) {
         File file = new File(System.getenv().get("file_name"))
         if (!file.exists()) {
+            file.createNewFile()
             new URL(System.getenv().get("url")).withInputStream { i -> file.withOutputStream { it << i } }
         }
         keyStore = file.path
