@@ -32,12 +32,12 @@ public class DeLogger
         LOGGER.info("!!! LOGGERS BEING DISABLED - SOME IMPORTANT INFO MIGHT BE MISSING, REMOVED IF NEEDED IN BUG REPORTS !!!");
         LoggerHacks.disableLogger(Commands.LOGGER);
         LoggerHacks.disableLogger(Util.LOGGER);
+        LoggerHacks.disableLogger(EntityType.LOGGER);
+        LoggerHacks.disableLogger(LootTableManager.LOGGER);
+        LoggerHacks.disableLogger(SimpleReloadableResourceManager.LOGGER);
         getLogger(GameData.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(VersionChecker.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(ForgeConfigSpec.class).ifPresent(LoggerHacks::disableLogger);
-        getLogger(LootTableManager.class).ifPresent(LoggerHacks::disableLogger);
-        getLogger(EntityType.class).ifPresent(LoggerHacks::disableLogger);
-        getLogger(SimpleReloadableResourceManager.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(YggdrasilAuthenticationService.class).ifPresent(LoggerHacks::disableLogger);
         LoggerHacks.disableLogger(LogManager.getLogger(ForgeConfigSpec.class));
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
