@@ -35,11 +35,14 @@ public class DeLogger
         LoggerHacks.disableLogger(EntityType.LOGGER);
         LoggerHacks.disableLogger(LootTableManager.LOGGER);
         LoggerHacks.disableLogger(SimpleReloadableResourceManager.LOGGER);
+
         getLogger(GameData.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(VersionChecker.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(ForgeConfigSpec.class).ifPresent(LoggerHacks::disableLogger);
         getLogger(YggdrasilAuthenticationService.class).ifPresent(LoggerHacks::disableLogger);
+
         LoggerHacks.disableLogger(LogManager.getLogger(ForgeConfigSpec.class));
+
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             LoggerHacks.disableLogger(ClientRecipeBook.field_241555_k_);
             LoggerHacks.disableLogger(ModelBakery.LOGGER);
