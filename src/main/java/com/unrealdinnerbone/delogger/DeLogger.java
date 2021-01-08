@@ -3,6 +3,7 @@ package com.unrealdinnerbone.delogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import net.minecraft.client.renderer.model.BlockModel;
 import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.util.ClientRecipeBook;
@@ -99,6 +100,9 @@ public class DeLogger
                 if(finalDeLoggerConfig.atlasTexture) {
                     LoggerHacks.disableLogger(AtlasTexture.LOGGER);
                 }
+                if(finalDeLoggerConfig.blockModel) {
+                    LoggerHacks.disableLogger(BlockModel.LOGGER);
+                }
             });
 
         } catch (IOException e) {
@@ -123,6 +127,7 @@ public class DeLogger
         private boolean clientRecipeBook = true;
         private boolean modelBakery = true;
         private boolean atlasTexture = true;
+        private boolean blockModel = true;
 
     }
 
