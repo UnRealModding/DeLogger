@@ -38,82 +38,70 @@ public class DeLogger
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public DeLogger() {
-        LOGGER.info("!!! LOGGERS BEING DISABLED - SOME IMPORTANT INFO MIGHT BE MISSING, REMOVED IF NEEDED IN BUG REPORTS !!!");
         Path configFile = FMLPaths.CONFIGDIR.get().resolve("delogger.json");
-        if(!Files.exists(configFile)) {
+        if(createFile(configFile)) {
             try {
-                Files.createFile(configFile);
+                DeLoggerConfig config = createConfig(configFile);
+                if (config.printWarningMessage) {
+                    LOGGER.info("!!! LOGGERS BEING DISABLED - SOME IMPORTANT INFO MIGHT BE MISSING, REMOVED IF NEEDED IN BUG REPORTS !!!");
+                }
+                LoggerHacks.setPrintDisableMessage(config.printLoggersDisabled);
+
+                LoggerHacks.disableLogger(Commands.LOGGER, config.commands);
+                LoggerHacks.disableLogger(Util.LOGGER, config.util);
+                LoggerHacks.disableLogger(EntityType.LOGGER, config.entityType);
+                LoggerHacks.disableLogger(LootTableManager.LOGGER, config.lootTableManger);
+                LoggerHacks.disableLogger(SimpleReloadableResourceManager.LOGGER, config.simpleReloadableResourceManager);
+                LoggerHacks.disableLogger(ChunkSerializer.LOGGER, config.chunkSerializer);
+
+                getLogger(GameData.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.gameData));
+                getLogger(VersionChecker.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.versionChecker));
+                getLogger(ForgeConfigSpec.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.forgeConfigSpec));
+                getLogger(YggdrasilAuthenticationService.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.yggdrasilAuthenticationService));
+
+                LoggerHacks.disableLogger(LogManager.getLogger(ForgeConfigSpec.class), config.forgeConfigSpec);
+
+                DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+                    LoggerHacks.disableLogger(ClientRecipeBook.field_241555_k_, config.clientRecipeBook);
+                    LoggerHacks.disableLogger(ModelBakery.LOGGER, config.modelBakery);
+                    LoggerHacks.disableLogger(AtlasTexture.LOGGER, config.atlasTexture);
+                    LoggerHacks.disableLogger(BlockModel.LOGGER, config.blockModel);
+
+                });
+
+            } catch (IOException e) {
+                LOGGER.error("Error reading json from delogger.json", e);
+            }
+        }
+    }
+    
+    public DeLoggerConfig createConfig(Path path) throws IOException {
+        DeLoggerConfig deLoggerConfig = GSON.fromJson(Files.newBufferedReader(path), DeLoggerConfig.class);
+        if (deLoggerConfig == null) {
+            deLoggerConfig = new DeLoggerConfig();
+        }
+        Files.write(path, GSON.toJson(deLoggerConfig).getBytes());
+        return deLoggerConfig;
+    }
+    
+    private static boolean createFile(Path path) {
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+                return true;
             } catch (IOException e) {
                 LOGGER.error("Error creating delogger.json", e);
+                return false;
             }
         }
-        try {
-            DeLoggerConfig deLoggerConfig = GSON.fromJson(Files.newBufferedReader(configFile), DeLoggerConfig.class);
-            if(deLoggerConfig == null) {
-                deLoggerConfig = new DeLoggerConfig();
-            }
-            Files.write(configFile, GSON.toJson(deLoggerConfig).getBytes());
-            if(deLoggerConfig.commands) {
-                LoggerHacks.disableLogger(Commands.LOGGER);
-            }
-            if(deLoggerConfig.util) {
-                LoggerHacks.disableLogger(Util.LOGGER);
-            }
-            if(deLoggerConfig.entityType) {
-                LoggerHacks.disableLogger(EntityType.LOGGER);
-            }
-            if(deLoggerConfig.lootTableManger) {
-                LoggerHacks.disableLogger(LootTableManager.LOGGER);
-            }
-            if(deLoggerConfig.simpleReloadableResourceManager) {
-                LoggerHacks.disableLogger(SimpleReloadableResourceManager.LOGGER);
-            }
-            if(deLoggerConfig.chunkSerializer) {
-                LoggerHacks.disableLogger(ChunkSerializer.LOGGER);
-            }
-
-            if(deLoggerConfig.gameData) {
-                getLogger(GameData.class).ifPresent(LoggerHacks::disableLogger);
-            }
-            if(deLoggerConfig.versionChecker) {
-                getLogger(VersionChecker.class).ifPresent(LoggerHacks::disableLogger);
-            }
-            if(deLoggerConfig.forgeConfigSpec) {
-                getLogger(ForgeConfigSpec.class).ifPresent(LoggerHacks::disableLogger);
-            }
-            if(deLoggerConfig.yggdrasilAuthenticationService) {
-                getLogger(YggdrasilAuthenticationService.class).ifPresent(LoggerHacks::disableLogger);
-            }
-
-            if(deLoggerConfig.forgeConfigSpec) {
-                LoggerHacks.disableLogger(LogManager.getLogger(ForgeConfigSpec.class));
-            }
-
-            DeLoggerConfig finalDeLoggerConfig = deLoggerConfig;
-            DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-                if(finalDeLoggerConfig.clientRecipeBook) {
-                    LoggerHacks.disableLogger(ClientRecipeBook.field_241555_k_);
-                }
-                if(finalDeLoggerConfig.modelBakery) {
-                    LoggerHacks.disableLogger(ModelBakery.LOGGER);
-                }
-                if(finalDeLoggerConfig.atlasTexture) {
-                    LoggerHacks.disableLogger(AtlasTexture.LOGGER);
-                }
-                if(finalDeLoggerConfig.blockModel) {
-                    LoggerHacks.disableLogger(BlockModel.LOGGER);
-                }
-            });
-
-        } catch (IOException e) {
-            LOGGER.error("Error reading json from delogger.json", e);
-        }
-
-
+        return true;
     }
 
 
     public static class DeLoggerConfig {
+
+        private boolean printWarningMessage = true;
+        private boolean printLoggersDisabled = false;
         private boolean commands = true;
         private boolean util = true;
         private boolean entityType = true;
