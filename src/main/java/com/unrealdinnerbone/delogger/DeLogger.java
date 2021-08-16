@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Mod(DeLogger.MOD_ID)
@@ -58,9 +60,9 @@ public class DeLogger
                 getLogger(VersionChecker.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.versionChecker));
                 getLogger(ForgeConfigSpec.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.forgeConfigSpec));
                 getLogger(YggdrasilAuthenticationService.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.yggdrasilAuthenticationService));
-
                 LoggerHacks.disableLogger(LogManager.getLogger(ForgeConfigSpec.class), config.forgeConfigSpec);
 
+                config.loggers.forEach(logger -> LoggerHacks.disableLogger(LogManager.getLogger(logger), true));
                 DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
                     LoggerHacks.disableLogger(ClientRecipeBook.field_241555_k_, config.clientRecipeBook);
                     LoggerHacks.disableLogger(ModelBakery.LOGGER, config.modelBakery);
@@ -116,6 +118,7 @@ public class DeLogger
         private boolean modelBakery = true;
         private boolean atlasTexture = true;
         private boolean blockModel = true;
+        private List<String> loggers = Arrays.asList("ExampleLogger");
 
     }
 

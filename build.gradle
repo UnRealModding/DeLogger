@@ -3,14 +3,10 @@ import net.minecraftforge.gradle.common.util.ModConfig
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
         mavenCentral()
-        maven { url "https://dist.creeper.host/Sponge/maven" }
-
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
@@ -24,7 +20,6 @@ plugins {
 import net.minecraftforge.gradle.common.task.SignJar
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
 
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/markdown-git-changelog.gradle'
 apply from: "https://raw.githubusercontent.com/UnRealDinnerbone/GradleHelpers/master/version.gradle"
@@ -61,12 +56,10 @@ minecraft {
 
     runs {
         client {
-            args '--mixin.config', 'delogger.mixins.json'
             workingDirectory project.file('client')
             mods.add(projectMod)
         }
         server {
-            args '--mixin.config', 'delogger.mixins.json'
             workingDirectory project.file('server')
             mods.add(projectMod)
         }
@@ -86,25 +79,6 @@ String findLocalProperty(String name) {
     return this.getRootProject().property(name)
 }
 
-task signJar(type: SignJar, dependsOn: jar) {
-    if(System.getenv().get("file_name") != null) {
-        File file = new File(System.getenv().get("file_name"))
-        if (!file.exists()) {
-            new URL(System.getenv().get("url")).withInputStream { i -> file.withOutputStream { it << i } }
-        }
-        keyStore = file.path
-        alias = System.getenv().get("alias")
-        storePass = System.getenv().get("storePass")
-        keyPass = System.getenv().get("keyPass")
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-        doLast {
-            file.delete()
-        }
-    }
-}
-
-build.dependsOn signJar
 jar {
     manifest {
         attributes([
@@ -130,8 +104,4 @@ curseforge {
         addGameVersion minecraft_version
         addGameVersion 'Forge'
     }
-}
-
-mixin {
-    add sourceSets.main, "delogger.refmap.json"
 }
