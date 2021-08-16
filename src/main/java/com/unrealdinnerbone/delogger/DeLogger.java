@@ -62,7 +62,9 @@ public class DeLogger
                 getLogger(YggdrasilAuthenticationService.class).ifPresent(logger -> LoggerHacks.disableLogger(logger, config.yggdrasilAuthenticationService));
                 LoggerHacks.disableLogger(LogManager.getLogger(ForgeConfigSpec.class), config.forgeConfigSpec);
 
-                config.loggers.forEach(logger -> LoggerHacks.disableLogger(LogManager.getLogger(logger), true));
+                if(config.loggers != null) {
+                    config.loggers.forEach(logger -> LoggerHacks.disableLogger(LogManager.getLogger(logger), true));
+                }
                 DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
                     LoggerHacks.disableLogger(ClientRecipeBook.field_241555_k_, config.clientRecipeBook);
                     LoggerHacks.disableLogger(ModelBakery.LOGGER, config.modelBakery);
