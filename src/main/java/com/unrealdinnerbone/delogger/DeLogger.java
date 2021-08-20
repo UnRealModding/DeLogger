@@ -70,7 +70,7 @@ public class DeLogger
                     Files.write(configFile, GSON.toJson(config).getBytes());
                 }
                 DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-                    LoggerHacks.disableLogger(ClientRecipeBook.field_241555_k_, config.clientRecipeBook);
+                    LoggerHacks.disableLogger(ClientRecipeBook.LOGGER, config.clientRecipeBook);
                     LoggerHacks.disableLogger(ModelBakery.LOGGER, config.modelBakery);
                     LoggerHacks.disableLogger(AtlasTexture.LOGGER, config.atlasTexture);
                     LoggerHacks.disableLogger(BlockModel.LOGGER, config.blockModel);
