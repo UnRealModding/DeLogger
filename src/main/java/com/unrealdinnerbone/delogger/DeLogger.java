@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,9 @@ public class DeLogger
 
                 if(config.loggers != null) {
                     config.loggers.forEach(logger -> LoggerHacks.disableLogger(LogManager.getLogger(logger), true));
+                }else {
+                    config.loggers = new ArrayList<>();
+                    Files.write(configFile, GSON.toJson(config).getBytes());
                 }
                 DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
                     LoggerHacks.disableLogger(ClientRecipeBook.field_241555_k_, config.clientRecipeBook);
