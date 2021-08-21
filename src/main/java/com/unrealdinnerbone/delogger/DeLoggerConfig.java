@@ -1,5 +1,6 @@
 package com.unrealdinnerbone.delogger;
 
+import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import net.minecraft.client.renderer.model.BlockModel;
 import net.minecraft.client.renderer.model.ModelBakery;
@@ -35,10 +36,12 @@ public class DeLoggerConfig {
             Util.class.getCanonicalName(),
             EntityType.class.getCanonicalName(),
             LootTableManager.class.getCanonicalName(),
-            SimpleReloadableResourceManager.class.getCanonicalName(),
             ChunkSerializer.class.getCanonicalName(),
             GameData.class.getCanonicalName(),
             ForgeConfigSpec.class.getCanonicalName(),
             VersionChecker.class.getCanonicalName());
+    public List<String> ignoredExceptions = Arrays.asList(
+            AuthenticationUnavailableException.class.getCanonicalName()
+    );
 
 }

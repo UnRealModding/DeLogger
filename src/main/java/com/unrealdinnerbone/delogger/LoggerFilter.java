@@ -1,5 +1,6 @@
 package com.unrealdinnerbone.delogger;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 
@@ -13,9 +14,6 @@ public class LoggerFilter extends AbstractFilter {
 
     @Override
     public Result filter(LogEvent event) {
-        if (deLoggerConfig.loggers.contains(event.getLoggerName())) {
-            return Result.DENY;
-        }
-        return super.filter(event);
+        return (event.getLevel() == Level.ERROR && event.getThrown() != null && deLoggerConfig.ignoredExceptions.contains(event.getThrown().getClass().getCanonicalName())) || deLoggerConfig.loggers.contains(event.getLoggerName()) ? Result.DENY : super.filter(event);
     }
 }
