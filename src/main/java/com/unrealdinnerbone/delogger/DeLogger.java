@@ -17,6 +17,8 @@ public class DeLogger {
 
     public static final String MOD_ID = "delogger";
 
-    public DeLogger() {}
+    public DeLogger() {
+
+    }
 
 }

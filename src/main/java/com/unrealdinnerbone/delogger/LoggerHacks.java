@@ -49,7 +49,7 @@ public class LoggerHacks
         }
     }
 
-    public static  DeLoggerConfig createConfig(Path path) throws IOException {
+    public static DeLoggerConfig createConfig(Path path) throws IOException {
         DeLoggerConfig deLoggerConfig = GSON.fromJson(Files.newBufferedReader(path), DeLoggerConfig.class);
         if (deLoggerConfig == null || deLoggerConfig.dontChangeMe == null) {
             deLoggerConfig = new DeLoggerConfig();
@@ -73,16 +73,19 @@ public class LoggerHacks
 
 
     public static void disableLogger(DeLoggerConfig deLoggerConfig) {
-        if (LOGGER instanceof org.apache.logging.log4j.core.Logger) {
-            org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LOGGER;
+        if (LOGGER instanceof org.apache.logging.log4j.core.Logger logger) {
+            org.apache.logging.log4j.core.Logger root = getRoot(logger);
             if(deLoggerConfig.enableDebugLog) {
-                getRoot(logger).addAppender(createAppender());
+                root.addAppender(createAppender());
             }
             LoggerFilter filter = new LoggerFilter(deLoggerConfig);
-            logger.getAppenders().values().stream()
-                    .filter(value -> !deLoggerConfig.whitelistLoggersTypes.contains(value.getName()))
-                    .filter(value -> value instanceof AbstractFilterable)
-                    .forEach(value -> ((AbstractFilterable) value).addFilter(filter));
+
+
+            root.getAppenders().values().stream()
+                        .filter(value -> !deLoggerConfig.whitelistLoggersTypes.contains(value.getName()))
+                        .filter(value -> value instanceof AbstractFilterable)
+                        .forEach(value -> ((AbstractFilterable) value).addFilter(filter));
+
         } else {
             LOGGER.error("Unsupported Logger used cant disable them!");
         }
@@ -110,12 +113,12 @@ public class LoggerHacks
                 ))
                 .withStrategy(DefaultRolloverStrategy.newBuilder().withMax("99").withFileIndex("min").build())
                 .build();
-        rollingRandomAccessFileAppender.addFilter(new AbstractFilter() {
-            @Override
-            public Result filter(LogEvent event) {
-                return event.getLevel() == Level.TRACE || event.getLevel() == Level.DEBUG ? Result.DENY : Result.NEUTRAL;
-            }
-        });
+//        rollingRandomAccessFileAppender.addFilter(new AbstractFilter() {
+//            @Override
+//            public Result filter(LogEvent event) {
+//                return event.getLevel() == Level.TRACE || event.getLevel() == Level.DEBUG ? Result.DENY : Result.NEUTRAL;
+//            }
+//        });
         rollingRandomAccessFileAppender.start();
         return rollingRandomAccessFileAppender;
     }

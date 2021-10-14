@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
 
     }
@@ -72,7 +72,7 @@ mixin {
 dependencies {
     minecraft 'net.minecraftforge:forge:' + project.minecraft_version + '-' + project.forge_version
     if (System.getProperty("idea.sync.active") != "true") {
-        annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+        annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
     }
 }
 
@@ -143,9 +143,3 @@ if (ENV.CURSE_DEPLOY) {
         }
     }
 }
-
-
-//Changelog
-//Curse Info
-//println("Changelog: " + getGitChangelog())
-//println("Release Type: " + project.property("release_type"))

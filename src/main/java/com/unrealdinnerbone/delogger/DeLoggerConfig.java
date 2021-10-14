@@ -13,19 +13,20 @@ public class DeLoggerConfig {
     public boolean enableDebugLog = false;
     public List<String> whitelistLoggersTypes = Collections.singletonList("DebugFile");
     public List<String> loggers = Arrays.asList(
-            "net.minecraft.client.renderer.model.BlockModel",
-            "net.minecraft.client.renderer.texture.AtlasTexture",
-            "com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService",
-            "net.minecraft.client.renderer.model.ModelBakery",
-            "net.minecraft.client.util.ClientRecipeBook",
-            "net.minecraft.command.Commands",
-            "net.minecraft.util.Util",
-            "net.minecraft.entity.EntityType",
-            "net.minecraft.loot.LootTableManager",
-            "net.minecraft.world.chunk.storage.ChunkSerializer",
+            "net.minecraft.Util",
+            "net.minecraft.commands.Commands",
             "net.minecraftforge.registries.GameData",
             "net.minecraftforge.common.ForgeConfigSpec",
-            "net.minecraftforge.fml.VersionChecker");
+            "net.minecraftforge.fml.VersionChecker",
+            "net.minecraft.world.entity.EntityType",
+            "net.minecraft.client.ClientRecipeBook",
+            "net.minecraft.client.resources.model.ModelBakery",
+            "com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService",
+            "net.minecraft.world.level.chunk.storage.ChunkSerializer",
+            "net.minecraft.client.renderer.block.model.BlockModel",
+            "net.minecraft.client.renderer.texture.TextureAtlas",
+            "net.minecraft.world.level.storage.loot.LootTable");
+
     public List<String> ignoredExceptions = Arrays.asList(
             AuthenticationUnavailableException.class.getCanonicalName()
     );

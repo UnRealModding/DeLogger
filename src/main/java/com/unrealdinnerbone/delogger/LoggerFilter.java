@@ -31,6 +31,8 @@ public class LoggerFilter extends AbstractFilter {
                     return Result.DENY;
                 }
             }
+        }else {
+            return super.filter(event);
         }
         return super.filter(event);
     }
