@@ -3,13 +3,10 @@ import net.minecraftforge.gradle.common.util.ModConfig
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 
@@ -18,7 +15,6 @@ plugins {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'maven-publish'
 
 apply from: 'https://files.saps.dev/ci/git-md-changelog.gradle'
@@ -29,9 +25,7 @@ archivesBaseName = project.archives_base_name
 version = "${mod_version}-build.${ENV.GITHUB_RUN_NUMBER ?: 9999}+mc${minecraft_version}"
 group = 'com.unrealdinnerbone'
 
-
-
-def mixinJson = project.mod_id + ".mixins.json"
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -45,12 +39,10 @@ minecraft {
         client {
             workingDirectory project.file('run')
             mods.add(projectMod)
-            args '--mixin.config', mixinJson
         }
 
         server {
             workingDirectory project.file('run')
-            args '--mixin.config', mixinJson
             mods.add(projectMod)
         }
 
@@ -64,22 +56,13 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-
-mixin {
-    add sourceSets.main, project.mod_id + '.refmap.json'
-}
-
 dependencies {
     minecraft 'net.minecraftforge:forge:' + project.minecraft_version + '-' + project.forge_version
-    if (System.getProperty("idea.sync.active") != "true") {
-        annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
-    }
 }
 
 jar {
     manifest {
         attributes([
-                "MixinConfigs": mixinJson,
                 "Specification-Title"     : project.mod_id,
                 "Specification-Vendor"    : "UnRealDinnerbone",
                 "Specification-Version"   : "1",

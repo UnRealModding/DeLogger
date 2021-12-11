@@ -39,14 +39,6 @@ public class LoggerHacks
                 LOGGER.error("Error reading json from delogger.json", e);
             }
         }
-        Path oldConfig = FMLPaths.CONFIGDIR.get().resolve("delogger.json");
-        if(Files.exists(oldConfig)) {
-            try {
-                Files.delete(oldConfig);
-            } catch (IOException e) {
-                LOGGER.error("Error removing old json config", e);
-            }
-        }
     }
 
     public static DeLoggerConfig createConfig(Path path) throws IOException {
@@ -54,7 +46,7 @@ public class LoggerHacks
         if (deLoggerConfig == null || deLoggerConfig.dontChangeMe == null) {
             deLoggerConfig = new DeLoggerConfig();
         }
-        Files.write(path, GSON.toJson(deLoggerConfig).getBytes());
+        Files.writeString(path, GSON.toJson(deLoggerConfig));
         return deLoggerConfig;
     }
 
@@ -113,12 +105,12 @@ public class LoggerHacks
                 ))
                 .withStrategy(DefaultRolloverStrategy.newBuilder().withMax("99").withFileIndex("min").build())
                 .build();
-//        rollingRandomAccessFileAppender.addFilter(new AbstractFilter() {
-//            @Override
-//            public Result filter(LogEvent event) {
-//                return event.getLevel() == Level.TRACE || event.getLevel() == Level.DEBUG ? Result.DENY : Result.NEUTRAL;
-//            }
-//        });
+        rollingRandomAccessFileAppender.addFilter(new AbstractFilter() {
+            @Override
+            public Result filter(LogEvent event) {
+                return event.getLevel() == Level.TRACE || event.getLevel() == Level.DEBUG ? Result.DENY : Result.NEUTRAL;
+            }
+        });
         rollingRandomAccessFileAppender.start();
         return rollingRandomAccessFileAppender;
     }
