@@ -127,7 +127,7 @@ publishing {
             maven {
                 url "https://maven.nanite.dev/"
                 credentials {
-                    username = "nanite"
+                    username = "unrealdinnerbone"
                     password = "${ENV.NANITE_DEPLOY}"
                 }
             }
