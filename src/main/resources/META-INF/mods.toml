@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[33,)"
+loaderVersion="[39,)"
 license="All Rights Reserved unless stated otherwise. Distrubtion permssion is given to FeedTheBeast and CurseForge for use in modpacks"
 [[mods]]
     modId="delogger"
