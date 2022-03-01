@@ -2,6 +2,7 @@ package com.unrealdinnerbone.delogger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -98,7 +99,7 @@ public class LoggerHacks
                 .withFileName("delogger/debug.log")
                 .withFilePattern("delogger/%d{yyyy-MM-dd}-%i.log.gz")
                 .setLayout(PatternLayout.newBuilder()
-                        .withPattern("[%d{ddMMMyyyy HH:mm:ss.SSS}] [%t/%level] [%logger{36}/%markerSimpleName]: %minecraftFormatting{%msg}{strip}%n%xEx")
+                        .withPattern("[%d{ddMMMyyyy HH:mm:ss.SSS}] [%t/%level] [%logger{36}/%markerSimpleName]: %minecraftFormatting{%msg{nolookups}}{strip}%n%xEx")
                         .build())
                 .withPolicy(CompositeTriggeringPolicy.createPolicy(OnStartupTriggeringPolicy.createPolicy(1),
                         TimeBasedTriggeringPolicy.newBuilder().build()
