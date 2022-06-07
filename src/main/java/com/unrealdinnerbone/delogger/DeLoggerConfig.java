@@ -10,7 +10,7 @@ public class DeLoggerConfig {
 
     public String dontChangeMe = "RandomString";
     public boolean printWarningMessage = true;
-    public boolean enableDebugLog = false;
+    public boolean printLoggerTypes = false;
     public List<String> whitelistLoggersTypes = Collections.singletonList("DebugFile");
     public List<String> loggers = Arrays.asList(
             "net.minecraft.Util",
