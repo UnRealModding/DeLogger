@@ -62,8 +62,7 @@ public class LoggerHacks
         final LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
         LoggerFilter filter = new LoggerFilter(deLoggerConfig);
         loggerConfig.getAppenders().values().stream()
-                .peek(value -> {
-                        if(deLoggerConfig.printLoggerTypes) LOGGER.info("Logger Type: {}", value.getName());
+                .peek(value -> { if(deLoggerConfig.printLoggerTypes) LOGGER.info("Logger Type: {}", value.getName());
                     })
                 .filter(value -> !deLoggerConfig.whitelistLoggersTypes.contains(value.getName()) && value instanceof AbstractFilterable)
                 .map(value -> (AbstractFilterable) value)

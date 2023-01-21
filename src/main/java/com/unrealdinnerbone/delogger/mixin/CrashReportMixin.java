@@ -11,8 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class CrashReportMixin
 {
     @Inject(method = "tryDetectVersion", at = @At("HEAD"))
-    private static void iWantToLoadEarly(CallbackInfo ci)
-    {
+    private static void iWantToLoadEarly(CallbackInfo ci) {
         LoggerHacks.init();
     }
 }
