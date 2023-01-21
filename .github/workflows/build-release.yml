@@ -34,4 +34,4 @@ jobs:
           CURSE_DEPLOY: ${{ secrets.CURSE_DEPLOY }}
         run: |
           chmod +x ./gradlew
-          ./gradlew build publish curseforge --stacktrace --no-daemon
+          ./gradlew build curseforge --stacktrace --no-daemon
